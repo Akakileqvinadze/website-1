@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Contact Us — ContentAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary: #8B5CF6;
+    --primary-2: #7C3AED;
+    --primary-dark: #6D28D9;
+    --lavender-bg: #F4F0FF;
+    --card-bg: #FFFFFF;
+    --text-dark: #1F2937;
+    --text-gray: #6B7280;
+    --shadow: 0 12px 30px rgba(11,7,30,0.06);
+    --icon-size: 52px;
+    --icon-radius: 14px;
+    --glass: rgba(255,255,255,0.6);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; scroll-behavior: smooth;}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,var(--lavender-bg), #F7F5FF 60%);
+    color:var(--text-dark);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+    display: flex; /* Added */
+    flex-direction: column; /* Added */
+  }
+  main {
+    flex-grow: 1; /* Added: Makes main content fill space */
+  }
+  /* Header */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 6%;
+    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+    position:sticky;
+    top:0;
+    backdrop-filter: blur(6px);
+    z-index:50;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  }
+  .logo{
+    font-weight:700;
+    color:var(--primary);
+    font-size:20px;
+    text-decoration: none;
+  }
+  nav a{
+    margin:0 12px;
+    text-decoration:none;
+    color:var(--text-gray);
+    font-weight:600;
+    font-size:14px;
+  }
+  .header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  
+  /* ===== CHANGED: Button size ===== */
+  .btn-demo{
+    padding: 8px 14px; /* Reduced padding */
+    font-size: 14px; /* Set font size */
+    border-radius:10px;
+    background:linear-gradient(180deg,var(--primary),var(--primary-2));
+    color:white;
+    font-weight:600;
+    border:none;
+    cursor:pointer;
+    box-shadow: 0 8px 20px rgba(139,92,246,0.18);
+    text-decoration: none;
+  }
+  
+  /* ===== NEW: Single Language Toggle Button ===== */
+  .lang-toggle-btn {
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+    width: 44px; /* Fixed width */
+    text-align: center;
+    transition: background .2s ease;
+  }
+  .lang-toggle-btn:hover {
+    background-color: var(--lavender-bg);
+  }
+  
+  /* Section Titles (needed for form) */
+  .section-title{ text-align:center; margin:44px 0 4px; font-size:28px; font-weight:700;}
+  .section-sub{ text-align:center;color:var(--text-gray); margin-bottom:22px; }
+
+  /* CTA Button Style (needed for form button) */
+  .cta-primary{
+    padding:12px 22px;
+    border-radius:12px;
+    background:linear-gradient(180deg,var(--primary),var(--primary-2));
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+    box-shadow: 0 14px 36px rgba(139,92,246,0.14);
+  }
+
+  /* START: Contact Form Styles */
+  .contact-form .form-group {
+    margin-bottom: 18px;
+  }
+  .contact-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+    text-align: left;
+  }
+  .contact-form input[type="text"],
+  .contact-form input[type="email"],
+  .contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 10px;
+    font-family: Inter, system-ui;
+    font-size: 15px;
+    background: var(--card-bg);
+  }
+  .contact-form input[type="text"]:focus,
+  .contact-form input[type="email"]:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--lavender-bg);
+  }
+  /* END: Contact Form Styles */
+
+  /* ===== START: NEW CONTACT PAGE STYLES ===== */
+  .contact-wrapper {
+    display: flex;
+    gap: 40px; /* Space between columns */
+    max-width: 1000px; /* Limit width */
+    margin: 0 auto;
+    padding: 0 6%;
+  }
+  .contact-info {
+    flex: 1; /* Take up half the space */
+  }
+  .contact-form {
+    flex: 1; /* Take up the other half */
+    max-width: none; /* Override the old max-width */
+    padding: 0; /* Remove old padding */
+  }
+  .contact-info h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: var(--text-dark);
+  }
+  .contact-info p {
+    color: var(--text-gray);
+    margin-bottom: 24px;
+  }
+  .info-item {
+    margin-bottom: 16px;
+  }
+  .info-item strong {
+    display: block;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .info-item a, .info-item p {
+    color: var(--text-gray);
+    text-decoration: none;
+    margin-top: 4px;
+    display: block;
+  }
+  .info-item a:hover {
+    color: var(--primary);
+  }
+  
+  /* Responsive for the contact wrapper */
+  @media (max-width: 800px) {
+    .contact-wrapper {
+        flex-direction: column;
+        gap: 30px;
+    }
+  }
+  /* ===== END: NEW CONTACT PAGE STYLES ===== */
+
+
+  footer{
+    padding:28px 6%;
+    background:var(--card-bg);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--text-gray);
+    border-top:1px solid rgba(0,0,0,0.03);
+  }
+  /* Responsive */
+  @media (max-width:960px){
+    footer{ flex-direction:column; gap:8px; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">ContentAI</a> 
+  <nav aria-label="Main nav">
+    </nav>
+  <div class="header-right">
+    <button class="lang-toggle-btn" id="lang-toggle" aria-label="Toggle language">EN</button>
+    <a href="contact.html" class="btn-demo" data-i18n="nav_contact">Contact</a>
+    <a href="https://calendly.com/akakileqvinadze0/30min" target="_blank" rel="noopener noreferrer" class="btn-demo" data-i18n="book_demo">Book a demo</a>
+  </div>
+</header>
+<main>
+  <section id="contact-section" style="padding-top: 60px; padding-bottom: 80px;">
+    <h2 class="section-title" data-i18n="contact_title">Contact Us</h2>
+    <p class="section-sub" data-i18n="contact_sub">Get in touch with our team.</p>
+    
+    <div class="contact-wrapper">
+      
+      <div class="contact-info">
+        <h3 data-i18n="contact_info_title">Contact Information</h3>
+        <p data-i18n="contact_info_desc">Fill out the form or contact us directly through one of the channels below.</p>
+        
+        <div class="info-item">
+          <strong><span data-i18n="contact_phone">Phone:</span></strong>
+          <a href="tel:+15551234567">+1 (555) 123-4567</a>
+        </div>
+
+        <div class="info-item">
+          <strong><span data-i18n="contact_email">Email:</span></strong>
+          <a href="mailto:info@contentai.com">info@contentai.com</a>
+        </div>
+
+        <div class="info-item">
+          <strong><span data-i18n="contact_address">Address:</span></strong>
+          <p data-i18n="contact_address_detail">123 AI Street, Tbilisi, Georgia</p>
+        </div>
+      </div>
+
+      <form class="contact-form" onsubmit="alert('Form submitted!'); return false;">
+        <div class="form-group">
+          <label for="name" data-i18n="form_name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email" data-i18n="form_email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message" data-i18n="form_message">Message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+        </div>
+        <button type="submit" class="cta-primary" style="width: 100%; border: none; cursor: pointer;" data-i18n="contact_send">Send Message</button>
+      </form>
+
+    </div>
+  </section>
+  </main>
+
+<footer>
+  <div>© 2025 ContentAI</div>
+  <div><span data-i18n="footer_privacy">Privacy Policy</span> • <span data-i18n="footer_terms">Terms of Service</span></div>
+</footer>
+
+<script>
+  // translations dictionary (EN + KA)
+  const translations = {
+    en: {
+      nav_features: "Features",
+      nav_pricing: "Pricing",
+      nav_contact: "Contact", // Re-used for new button
+      book_demo: "Book a demo",
+      hero_title: "Create Stunning Social Media Content",
+      hero_sub: "Transform ideas into beautiful social media posts using AI.",
+      get_started: "Get Started",
+      watch_demo: "Watch Demo",
+      stats_users: "Active Users",
+      stats_posts: "Posts Created",
+      stats_satisfaction: "Satisfaction",
+      features_title: "Powerful Features for Content Creators",
+      features_sub: "Everything you need to create, schedule, and publish content",
+      f1_title: "AI Generation",
+      f1_desc: "Create images and captions with a single prompt.",
+      f2_title: "Publishing",
+      f2_desc: "Publish instantly to all major social networks.",
+      f3_title: "Smart Scheduling",
+      f3_desc: "Post at the best times automatically.",
+      f4_title: "Brand Consistency",
+      f4_desc: "Upload your brand kit and keep everything consistent.",
+      f5_title: "Templates",
+      f5_desc: "Choose from hundreds of ready-made designs.",
+      f6_title: "Analytics",
+      f6_desc: "Track performance with detailed insights.",
+      how_title: "How It Works",
+      how_sub: "Simple steps to create and publish",
+      step1: "Describe what you want to create.",
+      step2: "Customize the generated options.",
+      step3: "Publish instantly or schedule.",
+      step4: "Analyze performance and improve.",
+      cta_title: "Ready to Transform Your Content?",
+      cta_demo: "Schedule a Demo",
+      cta_touch: "Get in Touch",
+      footer_privacy: "Privacy Policy",
+      footer_terms: "Terms of Service",
+      // --- Contact translations ---
+      contact_title: "Contact Us",
+      contact_sub: "Get in touch with our team.",
+      form_name: "Name",
+      form_email: "Email",
+      form_message: "Message",
+      contact_send: "Send Message",
+      contact_info_title: "Contact Information",
+      contact_info_desc: "Fill out the form or contact us directly through one of the channels below.",
+      contact_phone: "Phone:",
+      contact_email: "Email:",
+      contact_address: "Address:",
+      contact_address_detail: "123 AI Street, Tbilisi, Georgia",
+    },
+    ka: {
+      nav_features: "ფუნქციები",
+      nav_pricing: "ფასები",
+      nav_contact: "კონტაქტი", // Re-used for new button
+      book_demo: "დემო",
+      hero_title: "შექმენი გამორჩეული სოციალური მედია კონტენტი",
+      hero_sub: "გაითავისე იდეები და აქციე ისინი ლამაზ პოსტებად AI-ის დახმარებით.",
+      get_started: "დაწყება",
+      watch_demo: "დემოს ნახვა",
+      stats_users: "აქტიური მომხმარებელი",
+      stats_posts: "შექმნილი პოსტები",
+      stats_satisfaction: "კმაყოფილება",
+      features_title: "ძლიერი ფუნქციები კონტენტ კრეატორებისთვის",
+      features_sub: "ყველაფერი კონტენტის შექმნისა და გამოქვეყნებისათვის",
+      f1_title: "AI გენერაცია",
+      f1_desc: "შექმენი სურათები და წარწერები ერთი პრომპტით.",
+      f2_title: "გამოქვეყნება",
+      f2_desc: "გამოაქვეყნე ყველა მთავარ პლატფორმაზე.",
+      f3_title: "ჭკვიანი განრიგი",
+      f3_desc: "გამოაქვეყნე საუკეთესო დროს.",
+      f4_title: "ბრენდის სტილი",
+      f4_desc: "ატვირთე ბრენდის მასალები და შეინარჩუნე სტილი.",
+      f5_title: "შაბლონები",
+      f5_desc: "აირჩიე ასობით მზა დიზაინიდან.",
+      f6_title: "ანალიტიკა",
+      f6_desc: "გაანალიზე შედეგები და გააუმჯობესე.",
+      how_title: "როგორ მუშაობს",
+      how_sub: "მარტივი ეტაპები კონტენტის შესაქმნელად",
+      step1: "აღწერე, რა გინდა შექმნა.",
+      step2: "შეარჩიე სასურველი ვარიანტი.",
+      step3: "გამოაქვეყნე ან დაგეგმე.",
+      step4: "დააკვირდი შედეგებს და გაუმჯობესე.",
+      cta_title: "მზად ხარ გარდაქმნა შენი კონტენტი?",
+      cta_demo: "დემო შეხვედრა",
+      cta_touch: "კონტაქტი",
+      footer_privacy: "პირადი მონაცემები",
+      footer_terms: "გამოყენების წესები",
+      // --- Contact translations ---
+      contact_title: "დაგვიკავშირდით",
+      contact_sub: "გაგზავნეთ თქვენი შეტყობინება.",
+      form_name: "სახელი",
+      form_email: "ელ. ფოსტა",
+      form_message: "შეტყობინება",
+      contact_send: "გაგზავნა",
+      contact_info_title: "საკონტაქტო ინფორმაცია",
+      contact_info_desc: "შეავსეთ ფორმა ან დაგვიკავშირდით პირდაპირ ქვემოთ მოცემული არხებით.",
+      contact_phone: "ტელეფონი:",
+      contact_email: "ელ. ფოსტა:",
+      contact_address: "მისამართი:",
+      contact_address_detail: "123 AI ქუჩა, თბილისი, საქართველო",
+    }
+  };
+  // apply translations to elements with data-i18n
+  function applyTranslations(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      if(translations[lang] && translations[lang][key]){
+        el.textContent = translations[lang][key];
+      }
+    });
+  }
+
+  // set language (save in localStorage)
+  function setLanguage(lang){
+    if(!translations[lang]) return;
+    localStorage.setItem('site-lang', lang);
+    applyTranslations(lang);
+    
+    // Update the toggle button text
+    document.getElementById('lang-toggle').textContent = lang.toUpperCase();
+    
+    // set document lang attribute for accessibility / screen readers
+    document.documentElement.lang = (lang === 'ka') ? 'ka' : 'en';
+  }
+  
+  // init
+  (function initLang(){
+    const saved = localStorage.getItem('site-lang') || 'en';
+    
+    // NEW: Attach single click listener to the toggle button
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      const currentLang = localStorage.getItem('site-lang') || 'en';
+      const newLang = (currentLang === 'en') ? 'ka' : 'en';
+      setLanguage(newLang);
+    });
+    
+    setLanguage(saved);
+  })();
+</script>
+</body>
+</html>
