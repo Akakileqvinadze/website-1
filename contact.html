@@ -58,8 +58,6 @@
     font-size:20px;
   }
   .logo img{width:30px;height:30px;border-radius:8px;object-fit:cover}
-
-  /* logo badge */
   .logo-text { display:flex; align-items:center; gap:8px; }
   .logo-badge {
     display:inline-flex;
@@ -103,9 +101,7 @@
   main{flex:1;padding:90px 6% 60px;}
   .container{max-width:1100px;margin:0 auto;}
 
-  .section-title{
-    text-align:center;margin:8px 0 0;font-size:32px;font-weight:800;color:var(--primary);
-  }
+  .section-title{text-align:center;margin:8px 0 0;font-size:32px;font-weight:800;color:var(--primary);}
   .section-sub{ text-align:center;color:var(--text-muted); margin-bottom:28px; font-size:15px; }
 
   .contact-grid{
@@ -252,7 +248,7 @@
         <div class="card">
           <div class="contact-info-block">
             <div class="info-item">
-              <div class="icon" aria-hidden="true"><i class="fa-solid fa-phone"></i></div>
+              <div class="icon"><i class="fa-solid fa-phone"></i></div>
               <div class="text-group">
                 <strong>Phone</strong>
                 <a href="tel:+995571333303">+995 571 33 33 03</a>
@@ -261,7 +257,7 @@
             </div>
 
             <div class="info-item">
-              <div class="icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></div>
+              <div class="icon"><i class="fa-solid fa-envelope"></i></div>
               <div class="text-group">
                 <strong>Email</strong>
                 <a href="mailto:info@nebulahub.ai">info@nebulahub.ai</a>
@@ -269,7 +265,7 @@
             </div>
 
             <div class="info-item">
-              <div class="icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
               <div class="text-group">
                 <strong>Address</strong>
                 <p id="addressP" style="margin:0">ქ. ქუთაისი, წმინდა ნინოს N4</p>
@@ -277,28 +273,29 @@
             </div>
           </div>
 
-          <div class="socials" aria-label="Social links">
-            <a href="https://www.facebook.com/p/Nebula-AI-Hub-61573891437689/" target="_blank" rel="noopener noreferrer">
-              <i class="fab fa-facebook" aria-hidden="true"></i> Facebook
+          <div class="socials">
+            <a href="https://www.facebook.com/p/Nebula-AI-Hub-61573891437689/" target="_blank">
+              <i class="fab fa-facebook"></i> Facebook
             </a>
-            <a href="https://www.linkedin.com/company/nebula-ai-hub/posts/" target="_blank" rel="noopener noreferrer">
-              <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
+            <a href="https://www.linkedin.com/company/nebula-ai-hub/posts/" target="_blank">
+              <i class="fab fa-linkedin"></i> LinkedIn
             </a>
           </div>
 
-          <div class="map-box" id="mapBox" aria-label="Map with Gala marker">
-            <!-- Google Maps embed with coordinates (Gala / Kutaisi) -->
+          <div class="map-box" id="mapBox">
             <iframe
-              id="mapIframe"
-              src="https://www.google.com/maps?q=42.27146,42.70013&z=17&output=embed"
-              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade" title="Gala — Kutaisi (map)"></iframe>
+        src="https://www.google.com/maps?q=42.27188334431592,42.70270947116418&hl=ge&z=15&output=embed"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
 
-            <!-- Overlay pin (visual) -->
-            <div class="map-overlay" aria-hidden="true">
-              <button class="map-pin" id="mapPin" title="Gala — ქუთაისი (გადასვლა Google Maps)"></button>
-            </div>
-          </div>
+
+           
+
         </div>
       </aside>
 
@@ -312,7 +309,6 @@
 </footer>
 
 <script>
-/* Translations and UI elements */
 const translations = {
   GE: {
     sectionTitle: "დაგვიკავშირდით",
@@ -330,116 +326,69 @@ const translations = {
     address: "ქ. ქუთაისი, წმინდა ნინოს N4",
     badge: "NA"
   },
-  en: {
+  EN: {  // 'en' გადააკეთეთ დიდი ასოებით
     sectionTitle: "Contact Us",
     sectionSub: "Get in touch with our team",
-    formTitle: "Fill out the form and we will contact you shortly",
+    formTitle: "Fill out the form and we will contact you shortly.",
     labelName: "Name",
     labelPhone: "Phone",
-    labelCompany: "Company Name",
+    labelCompany: "Company",
     labelMessage: "Message",
     sendBtn: "Send",
     placeholderName: "Name",
     placeholderPhone: "+995",
     placeholderCompany: "Nebula Hub",
-    placeholderMessage: "What do you want to tell us?",
-    address: "Kutaisi, 4 Tsminda Nino St.",
+    placeholderMessage: "Your message",
+    address: "4, St. Nino Street, Kutaisi",
     badge: "NA"
   }
 };
 
-let currentLang = 'GE';
+let currentLang = "GE";
+const langBtn = document.getElementById("lang-toggle");
 
-const elements = {
-  sectionTitle: document.querySelector('.section-title'),
-  sectionSub: document.querySelector('.section-sub'),
-  formTitle: document.querySelector('.form-card h3'),
-  labelName: document.querySelector('label[for="name"]'),
-  labelPhone: document.querySelector('label[for="phone"]'),
-  labelCompany: document.querySelector('label[for="company"]'),
-  labelMessage: document.querySelector('label[for="message"]'),
-  sendBtn: document.getElementById('sendBtn'),
-  inputName: document.getElementById('name'),
-  inputPhone: document.getElementById('phone'),
-  inputCompany: document.getElementById('company'),
-  inputMessage: document.getElementById('message'),
-  addressP: document.getElementById('addressP'),
-  logoBadge: document.getElementById('logoBadge')
-};
-
-function setLanguage(lang){
+function updateLanguage(lang){
   currentLang = lang;
-  document.documentElement.lang = lang;
   const t = translations[lang];
-
-  if(elements.sectionTitle) elements.sectionTitle.textContent = t.sectionTitle;
-  if(elements.sectionSub) elements.sectionSub.textContent = t.sectionSub;
-  if(elements.formTitle) elements.formTitle.textContent = t.formTitle;
-  if(elements.labelName) elements.labelName.innerHTML = t.labelName + ' <span style="color:var(--error)">*</span>';
-  if(elements.labelPhone) elements.labelPhone.innerHTML = t.labelPhone + ' <span style="color:var(--error)">*</span>';
-  if(elements.labelCompany) elements.labelCompany.innerHTML = t.labelCompany + ' <span style="color:var(--error)">*</span>';
-  if(elements.labelMessage) elements.labelMessage.textContent = t.labelMessage;
-  if(elements.sendBtn) elements.sendBtn.textContent = t.sendBtn;
-
-  if(elements.inputName) elements.inputName.placeholder = t.placeholderName;
-  if(elements.inputPhone) elements.inputPhone.placeholder = t.placeholderPhone;
-  if(elements.inputCompany) elements.inputCompany.placeholder = t.placeholderCompany;
-  if(elements.inputMessage) elements.inputMessage.placeholder = t.placeholderMessage;
-
-  document.getElementById('lang-toggle').textContent = lang.toUpperCase();
-  if(elements.addressP) elements.addressP.textContent = t.address;
-  if(elements.logoBadge) elements.logoBadge.textContent = t.badge || 'NA';
+  document.querySelector('.section-title').textContent = t.sectionTitle;
+  document.querySelector('.section-sub').textContent = t.sectionSub;
+  document.querySelector('.form-card h3').textContent = t.formTitle;
+  document.querySelector('label[for="name"]').textContent = t.labelName;
+  document.querySelector('label[for="phone"]').textContent = t.labelPhone;
+  document.querySelector('label[for="company"]').textContent = t.labelCompany;
+  document.querySelector('label[for="message"]').textContent = t.labelMessage;
+  document.getElementById('sendBtn').textContent = t.sendBtn;
+  document.getElementById('name').placeholder = t.placeholderName;
+  document.getElementById('phone').placeholder = t.placeholderPhone;
+  document.getElementById('company').placeholder = t.placeholderCompany;
+  document.getElementById('message').placeholder = t.placeholderMessage;
+  document.getElementById('addressP').textContent = t.address;
+  document.getElementById('logoBadge').textContent = t.badge;
+  langBtn.textContent = lang;
 }
 
-// Toggle language
-document.getElementById('lang-toggle').addEventListener('click', ()=>{
-  setLanguage(currentLang === 'GE' ? 'en' : 'GE');
+langBtn.addEventListener('click', ()=>{
+  // გადართვა GE <-> EN
+  const newLang = currentLang === 'GE' ? 'EN' : 'GE';
+  updateLanguage(newLang);
 });
 
-// Initialize
-setLanguage(currentLang);
+// საწყისი ენის ნაჩვენები ტექსტები
+updateLanguage(currentLang);
 
-/* Client-side validation */
-(function(){
-  const form = document.getElementById('contactForm');
-  if(!form) return;
-  form.addEventListener('submit', function(e){
-    let valid = true;
-    ['name','phone','company'].forEach(id=>{
-      const el = document.getElementById(id);
-      const err = document.getElementById('err-' + id);
-      if(!el.value.trim()){ valid=false; if(err){ err.style.display='block'; err.textContent='Required'; } }
-      else{ if(err){ err.style.display='none'; } }
-    });
-    if(!valid) e.preventDefault();
+// Simple form validation
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  let valid = true;
+  ['name','phone','company'].forEach(id=>{
+    const val = document.getElementById(id).value.trim();
+    const errDiv = document.getElementById('err-'+id);
+    if(!val){ errDiv.textContent = 'Required'; errDiv.style.display='block'; valid=false; } 
+    else { errDiv.style.display='none'; }
   });
-})();
-
-/* Map pin behavior */
-(function(){
-  // Coordinates for Gala, Kutaisi
-  const lat = 42.27146, lng = 42.70013;
-
-  const pin = document.getElementById('mapPin');
-  if(pin){
-    pin.addEventListener('click', function(e){
-      e.preventDefault();
-      // Open Google Maps with the coordinates in a new tab
-      const gmUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat + ',' + lng)}`;
-      window.open(gmUrl, '_blank', 'noopener');
-    });
-
-    // keyboard accessibility: Enter/Space should open maps
-    pin.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        const gmUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat + ',' + lng)}`;
-        window.open(gmUrl, '_blank', 'noopener');
-      }
-    });
-  }
-})();
+  if(!valid) e.preventDefault();
+});
 </script>
+
 
 </body>
 </html>
