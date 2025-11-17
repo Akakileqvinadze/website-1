@@ -252,7 +252,7 @@
       footer_privacy: "Privacy Policy",
       footer_terms: "Terms of Service"
     },
-    ka: {
+    GE: {
       nav_contact: "კონტაქტი",
       book_demo: "დემო",
       contact_title: "დაგვიკავშირდით",
@@ -286,14 +286,14 @@
     localStorage.setItem('site-lang', lang);
     applyTranslations(lang);
     document.getElementById('lang-toggle').textContent = lang.toUpperCase();
-    document.documentElement.lang = (lang === 'ka') ? 'ka' : 'en';
+    document.documentElement.lang = (lang === 'GE') ? 'GE' : 'en';
   }
   
   (function initLang(){
     const saved = localStorage.getItem('site-lang') || 'en';
     document.getElementById('lang-toggle').addEventListener('click', () => {
       const currentLang = localStorage.getItem('site-lang') || 'en';
-      const newLang = (currentLang === 'en') ? 'ka' : 'en';
+      const newLang = (currentLang === 'en') ? 'GE' : 'en';
       setLanguage(newLang);
     });
     setLanguage(saved);
