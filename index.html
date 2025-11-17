@@ -269,10 +269,11 @@
 <body>
 
 <header>
-    <a href="index.html" class="logo">
+  <a href="index.html" class="logo">
   <img src="logo circle black bg.svg" alt="" style="height:40px; vertical-align:middle; margin-right:6px;">
   ContentAI
-</a> 
+</a>
+
   <nav aria-label="Main nav">
     </nav>
   <div class="header-right">
@@ -473,7 +474,7 @@
       contact_address: "Address:",
       contact_address_detail: "123 AI Street, Tbilisi, Georgia",
     },
-    ka: {
+    GE: {
       nav_features: "ფუნქციები",
       nav_pricing: "ფასები",
       nav_contact: "კონტაქტი", // Re-used for new button
@@ -545,7 +546,7 @@
     document.getElementById('lang-toggle').textContent = lang.toUpperCase();
     
     // set document lang attribute for accessibility / screen readers
-    document.documentElement.lang = (lang === 'ka') ? 'ka' : 'en';
+    document.documentElement.lang = (lang === 'GE') ? 'GE' : 'en';
   }
   
   // init
@@ -555,7 +556,7 @@
     // NEW: Attach single click listener to the toggle button
     document.getElementById('lang-toggle').addEventListener('click', () => {
       const currentLang = localStorage.getItem('site-lang') || 'en';
-      const newLang = (currentLang === 'en') ? 'ka' : 'en';
+      const newLang = (currentLang === 'en') ? 'GE' : 'en';
       setLanguage(newLang);
     });
     
