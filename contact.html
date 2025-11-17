@@ -4,271 +4,289 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Contact Us — Nebula AI Hub</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
   :root{
     --primary: #8B5CF6;
-    --primary-2: #7C3AED;
-    --primary-dark: #6D28D9;
-    --lavender-bg: #F4F0FF;
+    --accent: #8B5CF6;
+    --bg-grad-start: #F4F8FB;
+    --bg-grad-end: #F7F5FF;
     --card-bg: #FFFFFF;
-    --text-dark: #1F2937;
-    --text-gray: #6B7280;
-    --shadow: 0 12px 30px rgba(11,7,30,0.06);
-    --icon-size: 52px;
-    --icon-radius: 14px;
-    --glass: rgba(255,255,255,0.6);
+    --text-dark: #0F172A;
+    --text-muted: #6B7280;
+    --shadow-lg: 0 12px 30px rgba(11,7,30,0.06);
+    --radius-lg: 14px;
   }
   *{box-sizing:border-box}
-  html,body{height:100%; scroll-behavior: smooth;}
+  html,body{height:100%; scroll-behavior:smooth; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
   body{
     margin:0;
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background: linear-gradient(180deg,var(--lavender-bg), #F7F5FF 60%);
     color:var(--text-dark);
+    background: linear-gradient(180deg,var(--bg-grad-start), var(--bg-grad-end) 60%);
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
-    line-height:1.4;
-    display: flex;
-    flex-direction: column;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
   }
-  main { flex-grow: 1; }
 
+  /* FIXED HEADER */
   header{
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:18px 6%;
-    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
-    position:sticky;
+    background: rgba(255,255,255,0.98);
+    position:fixed;       /* changed to fixed */
     top:0;
+    left:0;
+    right:0;
     backdrop-filter: blur(6px);
-    z-index:50;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+    z-index:999;
+    border-bottom: 1px solid rgba(15,23,42,0.04);
   }
   .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
     font-weight:700;
     color:var(--primary);
     font-size:20px;
-    text-decoration: none;
   }
-  nav a{
-    margin:0 12px;
-    text-decoration:none;
-    color:var(--text-gray);
-    font-weight:600;
-    font-size:14px;
-  }
-  .header-right{
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .btn-demo{
-    padding: 8px 14px;
-    font-size: 14px;
-    border-radius:10px;
-    background:linear-gradient(180deg,var(--primary),var(--primary-2));
-    color:white;
-    font-weight:600;
-    border:none;
-    cursor:pointer;
-    box-shadow: 0 8px 20px rgba(139,92,246,0.18);
-    text-decoration: none;
-  }
-  .lang-toggle-btn {
+  .logo img{width:30px;height:30px;border-radius:8px;object-fit:cover}
+
+  nav{display:flex;gap:12px;align-items:center}
+  nav a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:14px;padding:8px 10px;border-radius:8px}
+  nav a:hover{background:rgba(14,165,233,0.08); color:var(--text-dark)}
+
+  .header-right{display:flex;align-items:center;gap:12px}
+  .lang-toggle-btn{
     border: 2px solid var(--primary);
     background: transparent;
     color: var(--primary);
     padding: 6px 10px;
     border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 13px;
-    width: 44px;
-    text-align: center;
-    transition: background .2s ease;
-  }
-  .lang-toggle-btn:hover { background-color: var(--lavender-bg); }
-
-  .section-title{ text-align:center; margin:44px 0 4px; font-size:28px; font-weight:700;}
-  .section-sub{ text-align:center;color:var(--text-gray); margin-bottom:22px; }
-  .cta-primary{
-    padding:12px 22px;
-    border-radius:12px;
-    background:linear-gradient(180deg,var(--primary),var(--primary-2));
-    color:white;
     font-weight:700;
-    text-decoration:none;
-    box-shadow: 0 14px 36px rgba(139,92,246,0.14);
+    cursor:pointer;
+    width:48px;
+    text-align:center;
   }
-  .contact-form .form-group { margin-bottom: 18px; }
-  .contact-form label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: var(--text-dark); text-align: left; }
-  .contact-form input[type="text"], .contact-form input[type="email"], .contact-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #D1D5DB;
-    border-radius: 10px;
-    font-family: Inter, system-ui;
-    font-size: 15px;
-    background: var(--card-bg);
-  }
-  .contact-form input:focus, .contact-form textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--lavender-bg);
+  .btn-demo{
+    padding:8px 14px;border-radius:10px;background:linear-gradient(180deg,var(--accent), #7C3AED);
+    color:white;font-weight:700;border:none;cursor:pointer;text-decoration:none;
+    box-shadow: 0 8px 20px rgba(139,92,246,0.12);
   }
 
-  .contact-wrapper { display: flex; gap: 40px; max-width: 1000px; margin: 0 auto; padding: 0 6%; }
-  .contact-info, .contact-form { flex: 1; }
-  .contact-info h3 { margin-top: 0; font-size: 20px; color: var(--text-dark); }
-  .contact-info p { color: var(--text-gray); margin-bottom: 24px; }
-  .info-item { margin-bottom: 16px; }
-  .info-item strong { display: block; color: var(--text-dark); font-weight: 600; font-size: 14px; }
-  .info-item a, .info-item p { color: var(--text-gray); text-decoration: none; margin-top: 4px; display: block; }
-  .info-item a:hover { color: var(--primary); }
+  /* main padding-top increased so fixed header doesn't overlap content */
+  main{flex:1;padding:90px 6% 60px;}
+  .container{max-width:1100px;margin:0 auto;}
 
-  @media (max-width: 800px) { .contact-wrapper { flex-direction: column; gap: 30px; } }
+  .section-title{
+    text-align:center;margin:8px 0 12px;font-size:30px;font-weight:800;color:var(--accent);
+  }
+  .section-sub{ text-align:center;color:var(--text-muted); margin-bottom:28px; }
+
+  .contact-grid{
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:28px;
+    align-items:start;
+    margin-top:18px;
+  }
+
+  .card {
+    background:var(--card-bg);
+    border-radius:var(--radius-lg);
+    padding:24px;
+    box-shadow:var(--shadow-lg);
+  }
+
+  .contact-info-card { display:flex;flex-direction:column;gap:12px; }
+  .contact-info-card h3{margin:0;font-size:18px;color:var(--text-dark)}
+  .contact-info-card p{margin:0;color:var(--text-muted)}
+  .info-item{display:flex;gap:12px;align-items:flex-start}
+  .info-item .icon{
+    min-width:44px;height:44px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--primary)
+  }
+  .info-item a, .info-item p { color:var(--text-muted); text-decoration:none; font-size:14px; margin:0 }
+
+  form.contact-form{display:flex;flex-direction:column;gap:14px}
+  .form-group label{display:block;margin-bottom:6px;font-weight:600;color:var(--text-dark);font-size:14px}
+  input[type="text"], input[type="email"], textarea {
+    width:100%; padding:12px 14px; border-radius:10px; border:1px solid #E6E9EE; font-size:15px; background: #fff;
+  }
+  input:focus, textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(14,165,233,0.06)}
+  .btn-send{background:linear-gradient(180deg,var(--accent), #7C3AED);color:white;padding:12px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer;width:100%}
+
+  .side-card { display:flex;flex-direction:column; gap:14px; }
+  .company-row{display:flex;align-items:center;gap:12px}
+  .company-row .logo-small{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#EDE9FE,#EEF2FF);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+  .company-meta{display:flex;flex-direction:column}
+  .map-box{height:260px;border-radius:10px;overflow:hidden;border:1px solid rgba(15,23,42,0.04)}
+
+  .socials{display:flex;flex-direction:column;gap:8px}
+  .socials a{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-dark);font-weight:600}
+  .socials i{min-width:34px;height:34px;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;color:var(--primary)}
+
+  /* BUSINESS HOURS: black background + white text as requested */
+  .hours-card{
+    margin-top:28px;
+    background:#000;          /* black */
+    color:#fff;               /* white text */
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+  }
+  .hours-card h4{margin:0;font-size:18px}
+  .hours-card p{margin:8px 0 0;font-size:14px;color:rgba(255,255,255,0.95)}
 
   footer{
-    padding:28px 6%;
-    background:var(--card-bg);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    color:var(--text-gray);
-    border-top:1px solid rgba(0,0,0,0.03);
+    padding:20px 6%;background:var(--card-bg);border-top:1px solid rgba(15,23,42,0.03);
+    display:flex;justify-content:space-between;align-items:center;color:var(--text-muted);font-size:14px;
   }
-  @media (max-width:960px){ footer{ flex-direction:column; gap:8px; align-items:flex-start;} }
+
+  @media (max-width:1100px){
+    .contact-grid{grid-template-columns:1fr 360px}
+  }
+  @media (max-width:880px){
+    main{padding:110px 6% 40px;} /* more top padding for mobile header */
+    .contact-grid{grid-template-columns:1fr; }
+    .side-card .map-box{height:220px}
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <a href="index.html" class="logo">Nebula AI Hub</a> 
-  <nav aria-label="Main nav"></nav>
+  <a class="logo" href="index.html">
+    <img src="logo.png" alt="Nebula logo" onerror="this.style.display='none'">
+    Nebula AI Hub
+  </a>
+
+  <!-- TOP NAV: Home, Services, Contact -->
+  <nav aria-label="Main nav">
+  
+  </nav>
+
   <div class="header-right">
-    <button class="lang-toggle-btn" id="lang-toggle" aria-label="Toggle language">EN</button>
-    <a href="contact.html" class="btn-demo" data-i18n="nav_contact">Contact</a>
-    <a href="https://calendly.com/akakileqvinadze0/30min" target="_blank" rel="noopener noreferrer" class="btn-demo" data-i18n="book_demo">Book a demo</a>
+    <button id="lang-toggle" class="lang-toggle-btn" aria-label="Toggle language">EN</button>
+    <a class="btn-demo" href="https://calendly.com/akakileqvinadze0/30min" target="_blank" rel="noopener">Book a demo</a>
   </div>
 </header>
 
 <main>
-  <section id="contact-section" style="padding-top: 60px; padding-bottom: 80px;">
+  <div class="container">
     <h2 class="section-title" data-i18n="contact_title">Contact Us</h2>
-    <p class="section-sub" data-i18n="contact_sub">Get in touch with our team.</p>
-    
-    <div class="contact-wrapper">
-      
-      <div class="contact-info">
-        <h3 data-i18n="contact_info_title">Contact Information</h3>
-        <p data-i18n="contact_info_desc">Fill out the form or contact us directly through one of the channels below.</p>
-        
-        <div class="info-item">
-          <strong><span data-i18n="contact_phone">Phone:</span></strong>
-          <a href="tel:+995571333303">+995 571 33 33 03</a>
-          <a href="tel:+995579588859">+995 579 58 88 59</a>
+    <p class="section-sub" data-i18n="contact_sub">Get in touch with our team — we usually reply within 1 business day.</p>
+
+    <div class="contact-grid">
+
+      <div class="card">
+        <div class="contact-info-card">
+          <h3 data-i18n="contact_info_title">Contact Information</h3>
+
+          <div class="info-item">
+            <div class="icon"><i class="fa-solid fa-phone"></i></div>
+            <div>
+              <strong style="display:block;color:var(--text-dark);font-weight:700;">Phone</strong>
+              <a href="tel:+995571333303">+995 571 33 33 03</a>
+              <a href="tel:+995579588859" style="display:block;margin-top:6px">+995 579 58 88 59</a>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+            <div>
+              <strong style="display:block;color:var(--text-dark);font-weight:700;">Email</strong>
+              <a href="mailto:info@nebulahub.ai">info@nebulahub.ai</a>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <strong style="display:block;color:var(--text-dark);font-weight:700;">Address</strong>
+              <p data-i18n="contact_address_detail" style="margin:0">ქ. ქუთაისი, წმინდა ნინოს N4</p>
+            </div>
+          </div>
         </div>
 
-        <div class="info-item">
-          <strong><span data-i18n="contact_email">Email:</span></strong>
-          <a href="mailto:info@nebulahub.ai">info@nebulahub.ai</a>
-        </div>
+        <hr style="margin:18px 0;border:none;border-top:1px solid rgba(15,23,42,0.04)">
 
-        <div class="info-item">
-          <strong><span data-i18n="contact_address">Address:</span></strong>
-          <p data-i18n="contact_address_detail">ქ. ქუთაისი, წმინდა ნინოს N4</p>
-        </div>
+        <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
+          <input type="hidden" name="form-name" value="contact">
+          <input type="hidden" name="bot-field">
 
-        <div class="info-item">
-          <strong>Social:</strong>
-          <a href="https://www.facebook.com/p/Nebula-AI-Hub-61573891437689/" target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a href="https://www.linkedin.com/company/nebula-ai-hub/posts/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        </div>
+
+          
+        </form>
       </div>
 
-      
-    <form class="contact-form" 
-      name="contact" 
-      method="POST" 
-      data-netlify="true"
-      netlify-honeypot="bot-field"
-      action="/success.html">
+      <aside class="side-card">
+        <div class="card">
+          <div class="company-row">
+            <div class="logo-small">
+  <img src="logo circle black bg.svg" alt="Nebula Logo">
+</div>
 
-  <!-- REQUIRED hidden field for Netlify forms -->
-  <input type="hidden" name="form-name" value="contact">
-  <input type="hidden" name="bot-field">
+            <div class="company-meta">
+              <div class="company-name" style="font-weight:800;color:var(--primary)">Nebula AI Hub</div>
+              <div style="color:var(--text-muted);font-size:14px">AI solutions & consulting</div>
+            </div>
+          </div>
 
-  <div class="form-group">
-    <label for="name" data-i18n="form_name">Name</label>
-    <input type="text" id="name" name="name" required>
-  </div>
+          <div style="margin-top:12px" class="socials">
+            <a href="https://www.facebook.com/p/Nebula-AI-Hub-61573891437689/" target="_blank" rel="noopener">
+              <i class="fab fa-facebook"></i> Facebook
+            </a>
+            <a href="https://www.linkedin.com/company/nebula-ai-hub/posts/" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+          </div>
 
-  <div class="form-group">
-    <label for="email" data-i18n="form_email">Email</label>
-    <input type="email" id="email" name="email" required>
-  </div>
+          <!-- Map with marker centered on Gala (Zakharia Paliashvili St. 29) -->
+<div class="map-box" style="margin-top:12px">
+  <iframe
+    src="https://www.google.com/maps?q=Gala%20Kutaisi%2C%2029%20Zakharia%20Paliashvili%20St%2C%20Kutaisi%20GE%204600&z=18&output=embed"
+    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
 
-  <div class="form-group">
-    <label for="message" data-i18n="form_message">Message</label>
-    <textarea id="message" name="message" rows="6" required></textarea>
-  </div>
+        </div>
 
-  <button type="submit" class="cta-primary" 
-          style="width: 100%; border: none; cursor: pointer;" 
-          data-i18n="contact_send">
-    Send Message
-  </button>
-</form>
-
+        
+      </aside>
 
     </div>
-  </section>
+  </div>
 </main>
 
 <footer>
   <div>© 2025 Nebula AI Hub</div>
-  <div><span data-i18n="footer_privacy">Privacy Policy</span> • <span data-i18n="footer_terms">Terms of Service</span></div>
+  <div><a href="/privacy.html" style="color:inherit;text-decoration:none">Privacy Policy</a> • <a href="/terms.html" style="color:inherit;text-decoration:none">Terms</a></div>
 </footer>
 
 <script>
   const translations = {
     en: {
-      nav_contact: "Contact",
-      book_demo: "Book a demo",
       contact_title: "Contact Us",
-      contact_sub: "Get in touch with our team.",
-      form_name: "Name",
-      form_email: "Email",
-      form_message: "Message",
+      contact_sub: "Get in touch with our team",
       contact_send: "Send Message",
       contact_info_title: "Contact Information",
-      contact_info_desc: "Fill out the form or contact us directly through one of the channels below.",
-      contact_phone: "Phone:",
-      contact_email: "Email:",
-      contact_address: "Address:",
-      contact_address_detail: "St. Nino Street N4, Kutaisi, Georgia",
-      footer_privacy: "Privacy Policy",
-      footer_terms: "Terms of Service"
+      
+      contact_address_detail: "St. Nino Street N4, Kutaisi, Georgia"
     },
-    GE: {
-      nav_contact: "კონტაქტი",
-      book_demo: "დემო",
+    ka: {
       contact_title: "დაგვიკავშირდით",
-      contact_sub: "გაგზავნეთ თქვენი შეტყობინება.",
-      form_name: "სახელი",
-      form_email: "ელ. ფოსტა",
-      form_message: "შეტყობინება",
+      contact_sub: "დაუკავშირდით ჩვენს გუნდს",
       contact_send: "გაგზავნა",
       contact_info_title: "საკონტაქტო ინფორმაცია",
-      contact_info_desc: "შეავსეთ ფორმა ან დაგვიკავშირდით პირდაპირ ქვემოთ მოცემული არხებით.",
-      contact_phone: "ტელეფონი:",
-      contact_email: "ელ. ფოსტა:",
-      contact_address: "მისამართი:",
-      contact_address_detail: "ქ. ქუთაისი, წმინდა ნინოს N4",
-      footer_privacy: "პირადი მონაცემები",
-      footer_terms: "გამოყენების წესები"
+    
+      contact_address_detail: "ქ. ქუთაისი, წმინდა ნინოს N4"
     }
   };
 
@@ -280,21 +298,19 @@
       }
     });
   }
-
   function setLanguage(lang){
     if(!translations[lang]) return;
     localStorage.setItem('site-lang', lang);
     applyTranslations(lang);
-    document.getElementById('lang-toggle').textContent = lang.toUpperCase();
-    document.documentElement.lang = (lang === 'GE') ? 'GE' : 'en';
+    const btn = document.getElementById('lang-toggle');
+    btn.textContent = (lang === 'ka') ? 'KA' : 'EN';
+    document.documentElement.lang = (lang === 'ka') ? 'ka' : 'en';
   }
-  
   (function initLang(){
     const saved = localStorage.getItem('site-lang') || 'en';
     document.getElementById('lang-toggle').addEventListener('click', () => {
-      const currentLang = localStorage.getItem('site-lang') || 'en';
-      const newLang = (currentLang === 'en') ? 'GE' : 'en';
-      setLanguage(newLang);
+      const current = localStorage.getItem('site-lang') || 'en';
+      setLanguage(current === 'en' ? 'ka' : 'en');
     });
     setLanguage(saved);
   })();
