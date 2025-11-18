@@ -333,11 +333,13 @@
 </footer>
 
 <script>
-/* Translations & language toggle (EN/GE) */
+/* ======= სრული JS: ენის ტოგლი + Netlify-compatible ფორმას გამგზავნი ======= */
+
+/* --- კონფიგურაცია: ტექსტები GE + EN --- */
 const translations = {
   GE: {
     sectionTitle: "დაგვიკავშირდით",
-    sectionSub: "დაუდევეთ ჩვენს გუნდს",
+    sectionSub: "დაუკავშირდით ჩვენს გუნდს",
     formTitle: "შეავსეთ ფორმა და მალევე დაგიკავშირდებით.",
     labelName: "სახელი",
     labelPhone: "ტელეფონი",
@@ -350,7 +352,9 @@ const translations = {
     placeholderMessage: "რისი თქმა გსურთ ჩვენთვის?",
     address: "ქ. ქუთაისი, წმინდა ნინოს N4",
     badge: "NA",
-    successText: "მადლობა! შეტყობინება გაგზავნილია."
+    successText: "მადლობა! შეტყობინება გაგზავნილია.",
+    requiredText: "სავალდებულო",
+    submitError: "გაგზავნა არ განხორციელდა. სცადეთ მოგვიანებით."
   },
   EN: {
     sectionTitle: "Contact Us",
@@ -367,114 +371,197 @@ const translations = {
     placeholderMessage: "Your message",
     address: "4, St. Nino Street, Kutaisi",
     badge: "NA",
-    successText: "Thanks! Message sent."
+    successText: "Thanks! Message sent.",
+    requiredText: "Required",
+    submitError: "Submission failed. Please try later."
   }
 };
 
-let currentLang = "GE";
-const langBtn = document.getElementById("lang-toggle");
-
-function updateLanguage(lang){
-  currentLang = lang;
-  const t = translations[lang];
-  document.querySelector('.section-title').textContent = t.sectionTitle;
-  document.querySelector('.section-sub').textContent = t.sectionSub;
-  document.querySelector('.form-card h3').textContent = t.formTitle;
-  document.querySelector('label[for="name"]').textContent = t.labelName;
-  document.querySelector('label[for="phone"]').textContent = t.labelPhone;
-  document.querySelector('label[for="company"]').textContent = t.labelCompany;
-  document.querySelector('label[for="message"]').textContent = t.labelMessage;
-  document.getElementById('sendBtn').textContent = t.sendBtn;
-  document.getElementById('name').placeholder = t.placeholderName;
-  document.getElementById('phone').placeholder = t.placeholderPhone;
-  document.getElementById('company').placeholder = t.placeholderCompany;
-  document.getElementById('message').placeholder = t.placeholderMessage;
-  document.getElementById('addressP').textContent = t.address;
-  document.getElementById('logoBadge').textContent = t.badge;
-  langBtn.textContent = lang;
-}
-
-langBtn.addEventListener('click', ()=>{
-  const newLang = currentLang === 'GE' ? 'EN' : 'GE';
-  updateLanguage(newLang);
-});
-
-// initialize language
-updateLanguage(currentLang);
-
-
-/* Contact form submit: use fetch('/') to post FormData to Netlify.
-   This ensures Netlify receives all named fields (name, phone, company, message).
-   The form element must include the hidden input 'form-name' (present above).
-*/
+/* --- ელემენტების მითითება --- */
+const langBtn = document.getElementById('lang-toggle');
 const contactForm = document.getElementById('contactForm');
 const submitSuccess = document.getElementById('submitSuccess');
 const submitSuccessText = document.getElementById('submitSuccessText');
 
-contactForm.addEventListener('submit', function(e){
-  e.preventDefault();
+/* ელემენტები, რომლებსაც განაახლებს ენის გადართვა */
+const uiMap = {
+  sectionTitle: document.querySelector('.section-title'),
+  sectionSub: document.querySelector('.section-sub'),
+  formTitle: document.querySelector('.form-card h3'),
+  labelName: document.querySelector('label[for="name"]'),
+  labelPhone: document.querySelector('label[for="phone"]'),
+  labelCompany: document.querySelector('label[for="company"]'),
+  labelMessage: document.querySelector('label[for="message"]'),
+  sendBtn: document.getElementById('sendBtn'),
+  nameInput: document.getElementById('name'),
+  phoneInput: document.getElementById('phone'),
+  companyInput: document.getElementById('company'),
+  messageInput: document.getElementById('message'),
+  addressP: document.getElementById('addressP'),
+  logoBadge: document.getElementById('logoBadge'),
+  submitSuccessText: submitSuccessText
+};
 
-  // simple validation
-  let valid = true;
-  ['name','phone','company'].forEach(id=>{
-    const val = document.getElementById(id).value.trim();
-    const errDiv = document.getElementById('err-'+id);
-    if(!val){
-      errDiv.textContent = (currentLang === 'GE') ? 'სავალდებულო' : 'Required';
-      errDiv.style.display = 'block';
-      valid = false;
-    } else {
-      errDiv.style.display = 'none';
+/* --- საწყისი ენა --- */
+let currentLang = localStorage.getItem('site-lang') || 'GE';
+
+/* --- ენისგანაწევა ფუნქცია --- */
+function applyLanguage(lang) {
+  const t = translations[lang] || translations.EN;
+  if(uiMap.sectionTitle) uiMap.sectionTitle.textContent = t.sectionTitle;
+  if(uiMap.sectionSub) uiMap.sectionSub.textContent = t.sectionSub;
+  if(uiMap.formTitle) uiMap.formTitle.textContent = t.formTitle;
+  if(uiMap.labelName) uiMap.labelName.textContent = t.labelName;
+  if(uiMap.labelPhone) uiMap.labelPhone.textContent = t.labelPhone;
+  if(uiMap.labelCompany) uiMap.labelCompany.textContent = t.labelCompany;
+  if(uiMap.labelMessage) uiMap.labelMessage.textContent = t.labelMessage;
+  if(uiMap.sendBtn) uiMap.sendBtn.textContent = t.sendBtn;
+  if(uiMap.nameInput) uiMap.nameInput.placeholder = t.placeholderName;
+  if(uiMap.phoneInput) uiMap.phoneInput.placeholder = t.placeholderPhone;
+  if(uiMap.companyInput) uiMap.companyInput.placeholder = t.placeholderCompany;
+  if(uiMap.messageInput) uiMap.messageInput.placeholder = t.placeholderMessage;
+  if(uiMap.addressP) uiMap.addressP.textContent = t.address;
+  if(uiMap.logoBadge) uiMap.logoBadge.textContent = t.badge;
+  if(langBtn) langBtn.textContent = lang;
+  localStorage.setItem('site-lang', lang);
+  currentLang = lang;
+}
+
+/* ინიციალიზაცია */
+applyLanguage(currentLang);
+
+/* ტოგლი ბტონი */
+if(langBtn){
+  langBtn.addEventListener('click', ()=>{
+    const newLang = (currentLang === 'GE') ? 'EN' : 'GE';
+    applyLanguage(newLang);
+  });
+}
+
+/* --- გაუმჯობესებული submit handler (FormData -> URLSearchParams) --- */
+if(contactForm){
+  contactForm.addEventListener('submit', function(event){
+    event.preventDefault();
+
+    // პატარა ვალიდაცია სასავალდებულო ველებისთვის
+    let valid = true;
+    ['name','phone','company'].forEach(id=>{
+      const input = document.getElementById(id);
+      const err = document.getElementById('err-'+id);
+      if(!input) return;
+      if(!input.value.trim()){
+        if(err){ err.textContent = (currentLang === 'GE') ? translations.GE.requiredText : translations.EN.requiredText; err.style.display = 'block'; }
+        valid = false;
+      } else {
+        if(err){ err.style.display = 'none'; }
+      }
+    });
+    if(!valid){
+      // focus first invalid field
+      const firstInvalid = document.querySelector('.field-error[style*="block"]');
+      if(firstInvalid){
+        const related = firstInvalid.previousElementSibling;
+        if(related && typeof related.focus === 'function') related.focus();
+      }
+      return;
+    }
+
+    try {
+      // აგროვოთ FormData პირდაპირ ფორმიდან (hidden inputs შედის)
+      const fd = new FormData(contactForm);
+
+      // ხელმეორედ დავრწმუნდეთ form-name-სი (Netlify-სთვის)
+      if(!fd.get('form-name')){
+        fd.append('form-name', contactForm.getAttribute('name') || 'contact');
+      }
+
+      // debug: Console log ყველა entry-სთვის (გამოწმებისთვის)
+      console.group('Contact form - FormData entries');
+      for(const pair of fd.entries()){
+        console.log(pair[0], ':', pair[1]);
+      }
+      console.groupEnd();
+
+      // FormData -> URLSearchParams (application/x-www-form-urlencoded)
+      const urlParams = new URLSearchParams();
+      for(const [k,v] of fd.entries()){
+        urlParams.append(k, v);
+      }
+      // debug: ლოგი რომ ნახოთ network-ში რა იგზავნება
+      console.log('URL encoded body:', urlParams.toString());
+
+      // disable submit button while sending
+      const submitBtn = document.getElementById('sendBtn') || contactForm.querySelector('button[type="submit"]');
+      if(submitBtn){
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+      }
+
+      // გაგზავნა Netlify endpoint-ზე
+      fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: urlParams.toString()
+      }).then(response => {
+        if(submitBtn){
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+        }
+        if(response.ok){
+          // წარმატება — აჩვენე inline success
+          const successText = (currentLang === 'GE') ? translations.GE.successText : translations.EN.successText;
+          if(submitSuccess && submitSuccessText){
+            submitSuccessText.textContent = successText;
+            submitSuccess.classList.add('show');
+          } else if(submitSuccess) {
+            submitSuccess.textContent = successText;
+            submitSuccess.classList.add('show');
+          } else {
+            alert(successText);
+          }
+
+          // reset form
+          contactForm.reset();
+
+          // scroll to success (თუ არსებობს)
+          if(submitSuccess){
+            submitSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+
+          // auto-hide success after 3 წამიანი
+          setTimeout(()=>{
+            if(submitSuccess) submitSuccess.classList.remove('show');
+          }, 3000);
+
+        } else {
+          // პასუხი 200 არ არის
+          const msg = (currentLang === 'GE') ? translations.GE.submitError : translations.EN.submitError;
+          alert(msg);
+          console.error('Form submission returned non-OK response', response);
+        }
+      }).catch(err => {
+        if(submitBtn){
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+        }
+        const msg = (currentLang === 'GE') ? translations.GE.submitError : translations.EN.submitError;
+        alert(msg);
+        console.error('Form submit error:', err);
+      });
+
+    } catch (err) {
+      console.error('Unexpected error while submitting form:', err);
+      const msg = (currentLang === 'GE') ? translations.GE.submitError : translations.EN.submitError;
+      alert(msg);
     }
   });
-  if(!valid) {
-    // focus first invalid
-    const firstErr = document.querySelector('.field-error[style*="block"]');
-    if(firstErr){
-      const input = firstErr.previousElementSibling;
-      if(input) input.focus();
-    }
-    return;
-  }
-
-  // Build FormData from form directly (includes hidden inputs)
-  const formData = new FormData(contactForm);
-  // Ensure form-name exists
-  if(!formData.get('form-name')){
-    formData.append('form-name', contactForm.getAttribute('name') || 'contact');
-  }
-
-  // Send to Netlify endpoint (root)
-  fetch('/', {
-    method: 'POST',
-    body: formData
-  }).then(response => {
-    if (response.ok) {
-      // show inline success
-      const text = (currentLang === 'GE') ? translations.GE.successText : translations.EN.successText;
-      submitSuccessText.textContent = text;
-      submitSuccess.classList.add('show');
-
-      // reset form fields
-      contactForm.reset();
-
-      // optionally: scroll to success message
-      submitSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      // auto-hide success after 3s
-      setTimeout(()=>{
-        submitSuccess.classList.remove('show');
-      }, 3000);
-    } else {
-      // fallback: show error alert
-      alert((currentLang === 'GE') ? 'გაგზავნა არ განხორციელდა. სცადეთ მოგვიანებით.' : 'Submission failed. Please try later.');
-    }
-  }).catch(err=>{
-    console.error('Form submit error:', err);
-    alert((currentLang === 'GE') ? 'შეცდომა: შეამოწმე ინტერნეტი და სცადე თავიდან.' : 'Error: check your connection and try again.');
-  });
-});
+} else {
+  console.warn('contactForm element not found — submit handler not attached.');
+}
 </script>
+
 
 </body>
 </html>
