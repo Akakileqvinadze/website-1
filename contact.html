@@ -20,6 +20,7 @@
     --shadow-lg: 0 12px 30px rgba(11,7,30,0.06);
     --radius-lg: 14px;
     --error: #dc2626;
+    --success: #10B981;
   }
   *{box-sizing:border-box}
   html,body{height:100%; scroll-behavior:smooth; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
@@ -177,6 +178,20 @@
 
   footer{padding:20px 6%;background:var(--card-bg);border-top:1px solid rgba(15,23,42,0.03); display:flex;justify-content:space-between;align-items:center;color:var(--text-muted);font-size:14px;}
 
+  /* success inline */
+  .submit-success {
+    display:none;
+    border-radius:10px;
+    padding:14px 16px;
+    background: linear-gradient(90deg, rgba(16,185,129,0.12), rgba(16,185,129,0.06));
+    color: #065f46;
+    font-weight:700;
+    margin-top:10px;
+    align-items:center;
+    gap:10px;
+  }
+  .submit-success.show { display:flex; }
+
   @media (max-width:1100px){ .contact-grid{grid-template-columns:1fr 360px} .side-card .map-box{height:260px} }
   @media (max-width:880px){ main{padding:110px 6% 40px;} .contact-grid{grid-template-columns:1fr;} .side-card .map-box{height:220px} .contact-info-block{display:none;} }
   @media (max-width:480px){
@@ -213,7 +228,10 @@
 
       <div class="card form-card">
         <h3></h3>
+
+        <!-- Netlify-ready form: static fields with names -->
         <form id="contactForm" class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html" novalidate>
+          <!-- required for Netlify detection -->
           <input type="hidden" name="form-name" value="contact">
           <input type="hidden" name="bot-field" aria-hidden="true">
 
@@ -237,10 +255,19 @@
 
           <div class="form-group">
             <label for="message"></label>
-            <textarea id="message" name="message" rows="4"></textarea>
+            <textarea id="message" name="message" rows="4" placeholder=""></textarea>
           </div>
 
           <button type="submit" class="btn-send" id="sendBtn"></button>
+
+          <!-- inline success message (shown after successful fetch submission) -->
+          <div id="submitSuccess" class="submit-success" role="status" aria-live="polite">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right:8px;">
+              <circle cx="12" cy="12" r="10" fill="#10B981"></circle>
+              <path d="M7.5 12.5l2.5 2.5 6-6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="submitSuccessText">Thanks — message sent</span>
+          </div>
         </form>
       </div>
 
@@ -284,18 +311,15 @@
 
           <div class="map-box" id="mapBox">
             <iframe
-        src="https://www.google.com/maps?q=42.27188334431592,42.70270947116418&hl=ge&z=15&output=embed"
-        width="100%"
-        height="100%"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-
-
-           
-
+              src="https://www.google.com/maps?q=42.27188334431592,42.70270947116418&hl=ge&z=15&output=embed"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
         </div>
       </aside>
 
@@ -309,10 +333,11 @@
 </footer>
 
 <script>
+/* Translations & language toggle (EN/GE) */
 const translations = {
   GE: {
     sectionTitle: "დაგვიკავშირდით",
-    sectionSub: "დაუკავშირდით ჩვენს გუნდს",
+    sectionSub: "დაუდევეთ ჩვენს გუნდს",
     formTitle: "შეავსეთ ფორმა და მალევე დაგიკავშირდებით.",
     labelName: "სახელი",
     labelPhone: "ტელეფონი",
@@ -324,9 +349,10 @@ const translations = {
     placeholderCompany: "ნებულაჰაბი",
     placeholderMessage: "რისი თქმა გსურთ ჩვენთვის?",
     address: "ქ. ქუთაისი, წმინდა ნინოს N4",
-    badge: "NA"
+    badge: "NA",
+    successText: "მადლობა! შეტყობინება გაგზავნილია."
   },
-  EN: {  // 'en' გადააკეთეთ დიდი ასოებით
+  EN: {
     sectionTitle: "Contact Us",
     sectionSub: "Get in touch with our team",
     formTitle: "Fill out the form and we will contact you shortly.",
@@ -340,7 +366,8 @@ const translations = {
     placeholderCompany: "Nebula Hub",
     placeholderMessage: "Your message",
     address: "4, St. Nino Street, Kutaisi",
-    badge: "NA"
+    badge: "NA",
+    successText: "Thanks! Message sent."
   }
 };
 
@@ -368,27 +395,86 @@ function updateLanguage(lang){
 }
 
 langBtn.addEventListener('click', ()=>{
-  // გადართვა GE <-> EN
   const newLang = currentLang === 'GE' ? 'EN' : 'GE';
   updateLanguage(newLang);
 });
 
-// საწყისი ენის ნაჩვენები ტექსტები
+// initialize language
 updateLanguage(currentLang);
 
-// Simple form validation
-document.getElementById('contactForm').addEventListener('submit', function(e){
+
+/* Contact form submit: use fetch('/') to post FormData to Netlify.
+   This ensures Netlify receives all named fields (name, phone, company, message).
+   The form element must include the hidden input 'form-name' (present above).
+*/
+const contactForm = document.getElementById('contactForm');
+const submitSuccess = document.getElementById('submitSuccess');
+const submitSuccessText = document.getElementById('submitSuccessText');
+
+contactForm.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  // simple validation
   let valid = true;
   ['name','phone','company'].forEach(id=>{
     const val = document.getElementById(id).value.trim();
     const errDiv = document.getElementById('err-'+id);
-    if(!val){ errDiv.textContent = 'Required'; errDiv.style.display='block'; valid=false; } 
-    else { errDiv.style.display='none'; }
+    if(!val){
+      errDiv.textContent = (currentLang === 'GE') ? 'სავალდებულო' : 'Required';
+      errDiv.style.display = 'block';
+      valid = false;
+    } else {
+      errDiv.style.display = 'none';
+    }
   });
-  if(!valid) e.preventDefault();
+  if(!valid) {
+    // focus first invalid
+    const firstErr = document.querySelector('.field-error[style*="block"]');
+    if(firstErr){
+      const input = firstErr.previousElementSibling;
+      if(input) input.focus();
+    }
+    return;
+  }
+
+  // Build FormData from form directly (includes hidden inputs)
+  const formData = new FormData(contactForm);
+  // Ensure form-name exists
+  if(!formData.get('form-name')){
+    formData.append('form-name', contactForm.getAttribute('name') || 'contact');
+  }
+
+  // Send to Netlify endpoint (root)
+  fetch('/', {
+    method: 'POST',
+    body: formData
+  }).then(response => {
+    if (response.ok) {
+      // show inline success
+      const text = (currentLang === 'GE') ? translations.GE.successText : translations.EN.successText;
+      submitSuccessText.textContent = text;
+      submitSuccess.classList.add('show');
+
+      // reset form fields
+      contactForm.reset();
+
+      // optionally: scroll to success message
+      submitSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // auto-hide success after 3s
+      setTimeout(()=>{
+        submitSuccess.classList.remove('show');
+      }, 3000);
+    } else {
+      // fallback: show error alert
+      alert((currentLang === 'GE') ? 'გაგზავნა არ განხორციელდა. სცადეთ მოგვიანებით.' : 'Submission failed. Please try later.');
+    }
+  }).catch(err=>{
+    console.error('Form submit error:', err);
+    alert((currentLang === 'GE') ? 'შეცდომა: შეამოწმე ინტერნეტი და სცადე თავიდან.' : 'Error: check your connection and try again.');
+  });
 });
 </script>
-
 
 </body>
 </html>
